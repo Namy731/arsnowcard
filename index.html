@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+
+<head>
+<title>AR snow card</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="8thwall:renderer" content="aframe:1.2.0">
+<meta name="8thwall:package" content="@8thwall.xrextras">
+<meta name="apple-mobile-web-app-capable" content="yes">
+
+<script src="//cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+<script src="//cdn.8thwall.com/web/aframe/8frame-1.2.0.min.js"></script>
+<script src="//cdn.8thwall.com/web/xrextras/xrextras.js"></script>
+<script src="//cdn.8thwall.com/web/aframe/aframe-extras-6.1.1.min.js"></script>
+<script async src="//apps.8thwall.com/xrweb?appKey=tzaBcZiyS25adpIBIKOemtmtYLV8ry6UjTSHJUiFGkEBpFHMM2GhNJtfPNXdRZKnpkFfiY"></script>
+
+</head>
+
+<script type="text/javascript">
+
+AFRAME.registerComponent('snowbase', {
+  init() {
+
+  setInterval(() => {
+
+  const x = Math.random()*4-2
+  const y = Math.random()*5.8-2.9
+  const ra = Math.random()*0.06+0.03
+  const rasize = ''+ra
+  const fposition = ''+x+' 10 '+y
+  const eposition = "property: position; to: "+x+" -1 "+y+"; dur: 6000; easing: linear; loop: false;"
+  const newElement = document.createElement('a-sphere')
+  newElement.setAttribute('position',fposition)
+  newElement.setAttribute('radius',rasize)
+  newElement.setAttribute('color','#FFF')
+  newElement.setAttribute('animation__position',eposition)
+  this.el.sceneEl.appendChild(newElement)
+
+  }, 80)
+  
+  }
+});
+</script>
+
+<body>
+<a-scene
+  xrextras-gesture-detector
+  landing-page
+  xrextras-loading
+  xrextras-runtime-error
+  renderer="colorManagement: true"
+  xrweb="allowedDevices: any">
+
+  <a-assets>
+  <a-asset-item id="snowcard" src="snowcard.gltf"></a-asset-item>
+  </a-assets>
+
+  <a-camera
+    id="camera"
+    position="0 8 8"
+    raycaster="objects: .cantap"
+    cursor="fuse: false; rayOrigin: mouse;">
+  </a-camera>
+
+  <a-entity
+    light="
+      type: directional;
+      intensity: 0.8;
+      castShadow: true;
+      shadowMapHeight:2048;
+      shadowMapWidth:2048;
+      shadowCameraTop: 10;
+      target: #model;
+      shadowRadius: 12"
+    xrextras-attach="target: model; offset: 1 15 3;"
+    shadow>
+  </a-entity>
+
+  <a-light type="ambient" intensity="0.7"></a-light>
+
+  <a-entity
+    id="model" 
+    gltf-model="#snowcard" 
+    position="0 0.05 0"
+    scale="1 1 1" 
+    shadow="receive: true"
+    animation-mixer="loop: repeat"
+    snowbase>
+  </a-entity>
+
+  <a-plane
+    rotation="-90 0 0" 
+    width="1000" 
+    height="1000" 
+    material="shader: shadow" 
+    shadow
+    xrextras-hider-material>
+  </a-plane>
+  
+</a-scene>
+</body>
+</html>
